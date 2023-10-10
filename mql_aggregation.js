@@ -280,3 +280,4 @@ db.books.aggregate([
     $out: "authors",
   },
 ]);
+// 스키마에 컬렉션으로 저장해서 사용 할 수 있음

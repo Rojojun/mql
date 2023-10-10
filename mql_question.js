@@ -108,7 +108,7 @@ db.restaurants.find(
     ],
   },
   {}
-);
+); //오답 -> 굳이 elemMatch 안써도 됨
 
 db.restaurants.find(
   {
