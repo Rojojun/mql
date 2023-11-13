@@ -138,3 +138,9 @@ db.restaurants.aggregate([
     },
   },
 ]);
+
+// JSON 형태로 데이터 추출 및 삽입
+/**
+ * mongoexport와 mongoimport라는 sh로 간단하게 export와 import가능
+ * 각각의 명령어는 --help를 통해 확인 가능
+ */
