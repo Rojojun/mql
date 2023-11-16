@@ -110,3 +110,61 @@ db.grids.find({
 });
 
 // 2d와 2dsphere 차이는 좌표의 범위 차이
+
+// 1. 음식점이 있는 동네
+var restaurant = db.restaurants.findOne();
+db.neighborhoods.find(
+  {
+    geometry: {
+      $geoIntersects: {
+        $geometry: { type: "Point", coordinates: restaurant.address.coord },
+      },
+    },
+  },
+  {
+    name: 1,
+  }
+);
+
+var neighborhood = db.neighborhoods.findOne();
+db.restaurants.find(
+  {
+    "address.coord": {
+      $geoWithin: {
+        $geometry: neighborhood.geometry,
+      },
+    },
+  },
+  {
+    name: 1,
+    _id: 0,
+  }
+);
+
+db.restaurants.createIndex({ "address.coord": "2dsphere" });
+db.restaurants.aggregate([
+  {
+    $geoNear: {
+      near: {
+        type: "Point",
+        coordinates: [-73.8845166, 40.744772],
+      },
+      key: "address.coord",
+      maxDistance: 1000,
+      query: {
+        cuisine: "Hamburgers",
+      },
+      distanceField: "dist",
+    },
+  },
+  {
+    $project: {
+      name: 1,
+      cuisine: 1,
+      dist: 1,
+    },
+  },
+  {
+    $count: "cnt",
+  },
+]);
